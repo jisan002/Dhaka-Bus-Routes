@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhaka Bus Route Finder - Made by Jisan</title>
+    <title>Dhaka Bus Route Finder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
@@ -71,7 +71,7 @@
     <div class="container mx-auto p-4 md:p-8 max-w-4xl min-h-screen flex flex-col justify-center">
         <header class="text-center mb-8">
             <h1 class="text-4xl md:text-5xl font-bold text-white" style="text-shadow: 0 0 15px rgba(255,255,255,0.5);">Dhaka Bus Route Finder</h1>
-            <p class="text-gray-300 mt-2">Your futuristic guide to navigating Dhaka's bus network.</p>
+            <p class="text-gray-300 mt-2">Your futuristic guide made by Jisan.</p>
         </header>
 
         <main class="main-container p-6 md:p-8 rounded-2xl">
@@ -115,6 +115,8 @@
                 <a href="mailto:ajisan2330152@bsds.uiu.ac.bd" class="hover:text-white hover:underline">Email</a>
                 <a href="https://www.facebook.com/al.takvir.ahmed.jisan/" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">Facebook</a>
                 <a href="https://github.com/jisan002" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">GitHub</a>
+                <!-- About Me Link Integrated -->
+                <a href="https://jisan002.github.io/Jisan-Portfolio/" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">About Me</a>
             </div>
             <p class="mt-2">Feel free to star this project on GitHub or contribute to make it even better!</p>
         </footer>
@@ -126,12 +128,12 @@
         // --- 3D Animated Background ---
         let scene, camera, renderer, stars;
         const jisanLetters = []; // Array to hold individual letter sprites (recycled pool)
-        const nameString = "JISAN";
+        const nameString = "JISANBRISTY";
         let nextLetterIndex = 0; // Tracks which letter in JISAN to spawn next
         const letterTextures = {}; // Stores pre-rendered textures for each letter
 
         // Declare baseFontSize and baseCanvasSize in a higher scope
-        const baseFontSize = 100; // Base font size for canvas rendering
+        const baseFontSize = 60; // Base font size for canvas rendering
         const baseCanvasSize = 150; // Base canvas size for each letter texture
 
         function init3DBackground() {
@@ -335,9 +337,6 @@
         const toInput = document.getElementById('to');
         const findRouteBtn = document.getElementById('find-route-btn');
         const resultsDiv = document.getElementById('results');
-        // Removed mapContainer and googleMapsLinkContainer as the map section is removed
-        // const mapContainer = document.getElementById('map-container');
-        // const googleMapsLinkContainer = document.getElementById('google-maps-link-container');
 
         const fromAutocomplete = document.getElementById('from-autocomplete');
         const toAutocomplete = document.getElementById('to-autocomplete');
@@ -400,10 +399,7 @@
             }
 
             resultsDiv.innerHTML = '<div class="flex justify-center items-center p-4"><div class="loader"></div><p class="ml-4 text-gray-300">Finding routes...</p></div>';
-            // Removed mapContainer.classList.add('hidden');
-            // Removed googleMapsLinkContainer.innerHTML = ''; // Clear previous link
-
-            // Use setTimeout to allow loader to show before heavy map operations
+            
             setTimeout(() => {
                 findRoutes(from, to);
             }, 500);
@@ -456,17 +452,6 @@
             }
 
             displayResults(directRoutes, transferRoutes, start, end);
-            // Removed Google Maps related calls
-            // if (typeof google !== 'undefined' && google.maps && directionsService && directionsRenderer) {
-            //     displayGoogleMapsRoute(start, end);
-            // } else {
-            //     console.warn("Google Maps API not fully loaded yet. Cannot display route.");
-            //     mapContainer.classList.add('hidden');
-            //     resultsDiv.innerHTML = `<div class="bg-yellow-900 bg-opacity-50 border border-yellow-500 text-yellow-300 p-4 rounded-lg" role="alert">
-            //                                 <p class="font-bold">Map Loading...</p>
-            //                                 <p>The map is still loading. Please try again in a moment.</p>
-            //                             </div>`;
-            // }
         }
 
         function displayResults(direct, transfers, start, end) {
@@ -477,7 +462,6 @@
                                             <p class="font-bold">No Route Found</p>
                                             <p>Sorry, we couldn't find a route between "${start}" and "${end}".</p>
                                         </div>`;
-                // Removed mapContainer.classList.add('hidden');
                 return;
             }
 
@@ -525,10 +509,6 @@
                 });
             }
         }
-
-        // Removed Google Maps related functions and variables
-        // function initMap() { ... }
-        // function displayGoogleMapsRoute(origin, destination) { ... }
     </script>
 </body>
 </html>
