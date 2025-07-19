@@ -7,10 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Leaflet.js for Maps -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -66,11 +62,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        #map {
-            height: 400px;
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+        /* Removed #map specific styles as the map section is removed */
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
@@ -109,34 +101,44 @@
             <!-- Results Section -->
             <div id="results" class="mt-8"></div>
             
-            <!-- Map Section -->
-            <div id="map-container" class="mt-8 hidden">
+            <!-- Removed Map Section -->
+            <!-- <div id="map-container" class="mt-8 hidden">
                 <h2 class="text-2xl font-bold mb-4 text-white">Route Overview</h2>
                 <div id="map"></div>
-                <p class="text-xs text-gray-400 mt-2 text-center">Note: The map shows a simplified line between locations and does not represent the exact bus path.</p>
-            </div>
+                <div id="google-maps-link-container" class="mt-4 text-center"></div>
+            </div> -->
         </main>
 
         <footer class="text-center mt-8 text-sm text-gray-400">
-            <p>Created by Al Takvir Ahmed Jisan.</p>
+            <p>Created with &#x2764; by Al Takvir Ahmed Jisan.</p>
             <div class="flex justify-center space-x-4 mt-2">
-                <a href="mailto:youremail@example.com?subject=Bug Report: Dhaka Bus Route Finder" class="hover:text-white hover:underline">Report a Bug</a>
-                <a href="mailto:youremail@example.com?subject=Inquiry: Dhaka Bus Route Finder" class="hover:text-white hover:underline">Contact Us</a>
+                <a href="mailto:ajisan2330152@bsds.uiu.ac.bd" class="hover:text-white hover:underline">Email</a>
+                <a href="https://www.facebook.com/al.takvir.ahmed.jisan/" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">Facebook</a>
+                <a href="https://github.com/jisan002" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">GitHub</a>
             </div>
-            <p class="mt-2">Bus data can be vary.</p>
+            <p class="mt-2">Feel free to star this project on GitHub or contribute to make it even better!</p>
         </footer>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <script>
         // --- 3D Animated Background ---
         let scene, camera, renderer, stars;
+        const jisanLetters = []; // Array to hold individual letter sprites (recycled pool)
+        const nameString = "JISAN";
+        let nextLetterIndex = 0; // Tracks which letter in JISAN to spawn next
+        const letterTextures = {}; // Stores pre-rendered textures for each letter
+
+        // Declare baseFontSize and baseCanvasSize in a higher scope
+        const baseFontSize = 100; // Base font size for canvas rendering
+        const baseCanvasSize = 150; // Base canvas size for each letter texture
 
         function init3DBackground() {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
             camera.position.z = 1;
-            camera.rotation.x = Math.PI / 2;
+            camera.rotation.x = Math.PI / 2; // This rotates the camera to look "down" the Z-axis, making Z the falling axis
 
             renderer = new THREE.WebGLRenderer({
                 canvas: document.querySelector("#bg-canvas"),
@@ -148,6 +150,7 @@
             const starCount = 6000;
             const positions = new Float32Array(starCount * 3);
             for (let i = 0; i < starCount * 3; i++) {
+                // Stars are spread out in X, Y, and Z
                 positions[i] = (Math.random() - 0.5) * 600;
             }
             starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -164,6 +167,36 @@
             stars = new THREE.Points(starGeo, starMaterial);
             scene.add(stars);
 
+            // Pre-render textures for each letter of "JISAN"
+            nameString.split('').forEach(char => {
+                let textCanvas = document.createElement('canvas');
+                textCanvas.width = baseCanvasSize;
+                textCanvas.height = baseCanvasSize;
+                let textContext = textCanvas.getContext('2d');
+
+                textContext.font = `Bold ${baseFontSize}px Inter`; // Using Inter font, bold and large
+                textContext.fillStyle = '#aaaaaa'; // Match star color for glow effect
+                textContext.textAlign = 'center';
+                textContext.textBaseline = 'middle';
+                textContext.fillText(char, textCanvas.width / 2, textCanvas.height / 2);
+
+                letterTextures[char] = new THREE.CanvasTexture(textCanvas);
+            });
+
+            // Create a pool of letter sprites to reuse
+            const maxFallingLetters = 30; // Max number of letters visible at once
+            for (let i = 0; i < maxFallingLetters; i++) {
+                let letterSprite = new THREE.Sprite(new THREE.SpriteMaterial({ 
+                    map: letterTextures['J'], // Default map, will be updated when spawned
+                    transparent: true, 
+                    blending: THREE.AdditiveBlending, 
+                    color: 0xaaaaaa 
+                }));
+                letterSprite.visible = false; // Initially hidden
+                scene.add(letterSprite);
+                jisanLetters.push(letterSprite); // Add to our pool
+            }
+
             window.addEventListener('resize', onWindowResize, false);
             animate();
         }
@@ -175,26 +208,66 @@
         }
 
         function animate() {
+            // Animate stars: move them along their local Z-axis (which appears as falling down the screen)
             stars.geometry.attributes.position.array.forEach((_, i) => {
-                if (i % 3 === 2) { // z-axis
-                    stars.geometry.attributes.position.array[i] -= 0.2;
-                    if (stars.geometry.attributes.position.array[i] < -200) {
-                        stars.geometry.attributes.position.array[i] = 200;
+                if (i % 3 === 2) { // Z-axis component
+                    stars.geometry.attributes.position.array[i] -= 0.2; // Move "down" the screen
+                    if (stars.geometry.attributes.position.array[i] < -200) { // If off-screen
+                        stars.geometry.attributes.position.array[i] = 200; // Reset to top
                     }
                 }
             });
             stars.geometry.attributes.position.needsUpdate = true;
-            stars.rotation.z += 0.0001;
+            stars.rotation.z += 0.0001; // Slight rotation for added effect
+
+            // Jisan letters animation
+            const letterSpawnRate = 0.005; // Chance for a letter to spawn each frame (low rate)
+            const letterFallSpeed = 0.2; // Speed at which letters fall (same as stars' Z movement)
+
+            // Spawn new letters sequentially
+            if (Math.random() < letterSpawnRate) {
+                let availableSprite = jisanLetters.find(sprite => !sprite.visible); // Find an unused sprite
+                if (availableSprite) {
+                    const charToSpawn = nameString[nextLetterIndex];
+                    availableSprite.material.map = letterTextures[charToSpawn]; // Assign the correct letter texture
+                    
+                    // Randomize scale for varied sizes
+                    const randomScale = 0.1 + Math.random() * 0.2; // Scale from 0.1 to 0.3
+                    // Apply scale based on original canvas size to maintain aspect ratio
+                    availableSprite.scale.set(baseCanvasSize * randomScale, baseCanvasSize * randomScale, 1);
+
+                    // Position: X and Y randomly across the visible screen area
+                    // Z starts far away and moves towards the camera (falling effect)
+                    availableSprite.position.x = (Math.random() - 0.5) * (renderer.domElement.width / 2); 
+                    availableSprite.position.y = (Math.random() - 0.5) * (renderer.domElement.height / 2);
+                    availableSprite.position.z = 200; // Start high up (far away)
+
+                    availableSprite.visible = true; // Make it visible
+                    nextLetterIndex = (nextLetterIndex + 1) % nameString.length; // Move to the next letter in sequence
+                }
+            }
+
+            // Animate falling letters
+            jisanLetters.forEach(letterSprite => {
+                if (letterSprite.visible) {
+                    letterSprite.position.z -= letterFallSpeed; // Make it fall along Z-axis
+                    // If it goes off-screen (too close to camera)
+                    if (letterSprite.position.z < -200) { 
+                        letterSprite.visible = false; // Hide it, ready for reuse
+                    }
+                }
+            });
 
             renderer.render(scene, camera);
             requestAnimationFrame(animate);
         }
 
-        init3DBackground();
+        // Initialize Three.js background when the window loads
+        window.onload = init3DBackground;
+
 
         // --- DATA MODEL (Scraped and Processed) ---
         const busData = [
-            // ... (Full bus data from previous version is included here)
             { busName: "Agradut", route: ["Mirpur 14", "Mirpur 10", "Kazipara", "Shewrapara", "Agargaon", "Bijoy Sarani", "Mohakhali", "Gulshan 1", "Badda Link Road", "Notun Bazar"] },
             { busName: "Ajmeri Glory", route: ["Sadarghat", "Gulistan", "Paltan", "Kakrail", "Shantinagar", "Malibagh", "Mouchak", "Rampura", "Badda", "Notun Bazar", "Nadda", "Kuril Bishwa Road", "Airport", "Abdullahpur", "Tongi"] },
             { busName: "Akik Paribahan", route: ["Gabtoli", "Technical", "Kallyanpur", "Shyamoli", "Asad Gate", "Dhanmondi 27", "Dhanmondi 32", "Kalabagan", "Science Lab", "New Market", "Nilkhet", "Azimpur"] },
@@ -257,27 +330,15 @@
             { busName: "Winner Transport", route: ["Sadarghat", "Gulistan", "Paltan", "Malibagh", "Rampura", "Badda", "Kuril Bishwa Road", "Airport", "Abdullahpur"] },
         ];
         
-        // --- Mock GeoData (for map plotting) ---
-        // In a real-world app, this would come from a Geocoding API.
-        const geoData = {
-            "mirpur 10": [23.8069, 90.3687], "gulshan 1": [23.7925, 90.4139], "jatrabari": [23.7089, 90.4322],
-            "motijheel": [23.7319, 90.4178], "farmgate": [23.7592, 90.3891], "shahbagh": [23.7409, 90.3931],
-            "gabtoli": [23.7779, 90.3443], "abdullahpur": [23.8794, 90.4007], "mohakhali": [23.7823, 90.4032],
-            "sadarghat": [23.7061, 90.4093], "new market": [23.7333, 90.3867], "badda": [23.7815, 90.4211],
-            "mirpur 14": [23.8166, 90.3698], "mirpur 1": [23.7958, 90.3575], "dhanmondi 32": [23.7523, 90.3790],
-            "azimpur": [23.7262, 90.3859], "savar": [23.8564, 90.2643], "banani": [23.7925, 90.4078]
-        };
-
         // --- APPLICATION LOGIC ---
         const fromInput = document.getElementById('from');
         const toInput = document.getElementById('to');
         const findRouteBtn = document.getElementById('find-route-btn');
         const resultsDiv = document.getElementById('results');
-        const mapContainer = document.getElementById('map-container');
-        let map; // To hold the map instance
+        // Removed mapContainer and googleMapsLinkContainer as the map section is removed
+        // const mapContainer = document.getElementById('map-container');
+        // const googleMapsLinkContainer = document.getElementById('google-maps-link-container');
 
-        // The rest of the JS logic (autocomplete, route finding) is largely the same
-        // ... (Full JS logic from previous version is included here)
         const fromAutocomplete = document.getElementById('from-autocomplete');
         const toAutocomplete = document.getElementById('to-autocomplete');
         const allStops = [...new Set(busData.flatMap(bus => bus.route))].sort();
@@ -339,9 +400,10 @@
             }
 
             resultsDiv.innerHTML = '<div class="flex justify-center items-center p-4"><div class="loader"></div><p class="ml-4 text-gray-300">Finding routes...</p></div>';
-            mapContainer.classList.add('hidden');
+            // Removed mapContainer.classList.add('hidden');
+            // Removed googleMapsLinkContainer.innerHTML = ''; // Clear previous link
 
-
+            // Use setTimeout to allow loader to show before heavy map operations
             setTimeout(() => {
                 findRoutes(from, to);
             }, 500);
@@ -351,6 +413,7 @@
             const directRoutes = [];
             const transferRoutes = [];
 
+            // Find direct routes based on your existing busData
             busData.forEach(bus => {
                 const startIndex = bus.route.findIndex(stop => stop.toLowerCase() === start.toLowerCase());
                 const endIndex = bus.route.findIndex(stop => stop.toLowerCase() === end.toLowerCase());
@@ -362,6 +425,7 @@
                 }
             });
 
+            // Find transfer routes based on your existing busData
             if (directRoutes.length === 0) {
                 const startBuses = busData.filter(bus => bus.route.some(stop => stop.toLowerCase() === start.toLowerCase()));
                 const endBuses = busData.filter(bus => bus.route.some(stop => stop.toLowerCase() === end.toLowerCase()));
@@ -392,6 +456,17 @@
             }
 
             displayResults(directRoutes, transferRoutes, start, end);
+            // Removed Google Maps related calls
+            // if (typeof google !== 'undefined' && google.maps && directionsService && directionsRenderer) {
+            //     displayGoogleMapsRoute(start, end);
+            // } else {
+            //     console.warn("Google Maps API not fully loaded yet. Cannot display route.");
+            //     mapContainer.classList.add('hidden');
+            //     resultsDiv.innerHTML = `<div class="bg-yellow-900 bg-opacity-50 border border-yellow-500 text-yellow-300 p-4 rounded-lg" role="alert">
+            //                                 <p class="font-bold">Map Loading...</p>
+            //                                 <p>The map is still loading. Please try again in a moment.</p>
+            //                             </div>`;
+            // }
         }
 
         function displayResults(direct, transfers, start, end) {
@@ -402,7 +477,7 @@
                                             <p class="font-bold">No Route Found</p>
                                             <p>Sorry, we couldn't find a route between "${start}" and "${end}".</p>
                                         </div>`;
-                mapContainer.classList.add('hidden');
+                // Removed mapContainer.classList.add('hidden');
                 return;
             }
 
@@ -449,46 +524,11 @@
                     resultsDiv.appendChild(card);
                 });
             }
-            
-            // --- Map Logic ---
-            const startCoord = geoData[start.toLowerCase()];
-            const endCoord = geoData[end.toLowerCase()];
-            
-            if (startCoord && endCoord) {
-                mapContainer.classList.remove('hidden');
-                if (map) {
-                    map.remove();
-                }
-                map = L.map('map').setView(startCoord, 12);
-
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                    subdomains: 'abcd',
-                    maxZoom: 20
-                }).addTo(map);
-
-                L.marker(startCoord).addTo(map).bindPopup(`<b>Start:</b> ${start}`).openPopup();
-                L.marker(endCoord).addTo(map).bindPopup(`<b>End:</b> ${end}`);
-
-                let latlngs = [startCoord];
-                
-                // Add transfer point to polyline if it exists
-                if(direct.length === 0 && transfers.length > 0) {
-                    const transferCoord = geoData[transfers[0].transferPoint.toLowerCase()];
-                    if(transferCoord) {
-                        latlngs.push(transferCoord);
-                        L.marker(transferCoord, { icon: L.icon({ iconUrl: 'https://placehold.co/25x41/f0ad4e/ffffff.png?text=T', iconSize: [25, 41], iconAnchor: [12, 41] }) }).addTo(map).bindPopup(`<b>Transfer:</b> ${transfers[0].transferPoint}`);
-                    }
-                }
-
-                latlngs.push(endCoord);
-
-                const polyline = L.polyline(latlngs, {color: 'cyan', dashArray: '5, 10'}).addTo(map);
-                map.fitBounds(polyline.getBounds().pad(0.2));
-            } else {
-                mapContainer.classList.add('hidden');
-            }
         }
+
+        // Removed Google Maps related functions and variables
+        // function initMap() { ... }
+        // function displayGoogleMapsRoute(origin, destination) { ... }
     </script>
 </body>
 </html>
