@@ -1,43 +1,43 @@
-```markdown
 # Dhaka Bus Route Finder by Al Takvir Ahmed Jisan
 
 ---
 
 ## Navigate Dhaka's Streets with Ease! 🚌
 
-Are you tired of the never-ending struggle to find the right bus route in Dhaka? Say goodbye to confusion and hello to **Dhaka Bus Route Finder**! Developed by **Al Takvir Ahmed Jisan**, this intuitive tool helps you discover direct and transfer bus routes across the bustling city of Dhaka, Bangladesh, quickly and efficiently.
+Struggling to figure out which bus to take in Dhaka? Say goodbye to confusion and hello to **Dhaka Bus Route Finder** — a smart, intuitive tool built by **Al Takvir Ahmed Jisan** to help you discover the best direct or transfer-based bus routes across Dhaka, Bangladesh.
 
-### Why You'll Love Dhaka Bus Route Finder:
+### 🚀 Key Features
 
-* **Effortless Route Discovery:** Simply enter your starting point and destination, and instantly find the best bus routes, including direct and single-transfer options.
-* **User-Friendly Interface:** A clean, modern design ensures a smooth and enjoyable experience for everyone.
-* **Smart Autocomplete:** Our intelligent autocomplete feature suggests bus stops as you type, saving you time and preventing typos.
-* **Dynamic Background:** Enjoy a unique and engaging 3D animated background that adds a touch of futuristic flair to your route-finding journey.
-* **Built for Dhaka:** Specifically tailored with an extensive database of Dhaka's bus routes and popular stops.
-
----
-
-## How to Use
-
-1.  **Enter Your Start:** Type your current location or desired starting bus stop into the "From" field.
-2.  **Enter Your Destination:** Type where you want to go into the "To" field.
-3.  **Find Your Route:** Click the "Find Route" button.
-4.  **Get Results:** Instantly see direct bus routes or suggested transfer options to reach your destination.
+- **Effortless Route Discovery:** Just input your starting point and destination — get instant results for direct or transfer-based bus options.
+- **User-Friendly Interface:** Clean, responsive, and beginner-friendly UI built for commuters of all types.
+- **Smart Autocomplete:** Type less, find more — the input fields suggest bus stops in real time.
+- **Interactive 3D Background:** Enjoy a futuristic visual experience while planning your journey.
+- **Local Focus:** Tailored for Dhaka’s urban commute with up-to-date, accurate data.
 
 ---
 
-## About the Developer
+## 🔧 How to Use
 
-Hello! I'm **Al Takvir Ahmed Jisan**, a passionate Data Scientist dedicated to creating useful and engaging tools that simplify everyday life. I crafted the Dhaka Bus Route Finder to solve a common urban challenge and provide a seamless experience for commuters in Dhaka.
-
-* **Email:** [ajisan2330152@bsds.uiu.ac.bd](mailto:ajisan2330152@bsds.uiu.ac.bd)
-* **Facebook:** [Al Takvir Ahmed Jisan](https://www.facebook.com/al.takvir.ahmed.jisan/)
-* **GitHub:** [jisan002](https://github.com/jisan002)
+1. **Start Location:** Enter your current area or bus stop in the "From" field.
+2. **Destination:** Enter your target stop or area in the "To" field.
+3. **Click "Find Route":** Instantly view suggested routes — direct or with necessary transfers.
+4. **Review Results:** View bus names, route changes (if any), and a visual map with indicators.
 
 ---
 
-## Contributions
+## 👨‍💻 About the Developer
 
-Feel free to star this project on GitHub or contribute to make it even better! Your suggestions and contributions are always welcome.
+Hey there! I'm **Al Takvir Ahmed Jisan**, a Data Science student passionate about building real-life solutions for real-life problems. This app is part of my mission to make Dhaka's chaotic transport system a bit more manageable — one commuter at a time.
 
-```
+- 📧 **Email:** [ajisan2330152@bsds.uiu.ac.bd](mailto:ajisan2330152@bsds.uiu.ac.bd)  
+- 🔗 **Facebook:** [Al Takvir Ahmed Jisan](https://www.facebook.com/al.takvir.ahmed.jisan/)  
+- 🐙 **GitHub:** [jisan002](https://github.com/jisan002)
+
+---
+
+## 🤝 Contribute to the Project
+
+Want to help improve this tool?  
+Feel free to **star**, **fork**, or **submit a pull request**. Bug reports, data contributions, and UI ideas are all welcome.
+
+Together, we can make public transport easier for everyone in Dhaka!
