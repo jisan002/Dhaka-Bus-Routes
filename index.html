@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhaka Bus Route Finder</title>
+    <title>Dhaka Bus Route Finder - Made by Jisan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:title" content="Dhaka Bus Route Finder by Al Takvir Ahmed Jisan">
+    <meta property="og:description" content="Navigate Dhaka's streets with ease! Find direct and transfer bus routes across Dhaka quickly and efficiently.">
+    <meta property="og:image" content="https://placehold.co/1200x630/1a202c/ffffff?text=Dhaka+Bus+Routes">
+    <meta property="og:url" content="https://jisan002.github.io/Dhaka-Bus-Routes/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dhaka Bus Route Finder by Al Takvir Ahmed Jisan">
+    <meta name="twitter:description" content="Navigate Dhaka's streets with ease! Find direct and transfer bus routes across Dhaka quickly and efficiently.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/1a202c/ffffff?text=Dhaka+Bus+Routes">
+    <!-- Optional: <meta name="twitter:site" content="@yourtwitterhandle"> -->
+    <!-- Optional: <meta name="twitter:creator" content="@yourtwitterhandle"> -->
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -62,7 +77,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Removed #map specific styles as the map section is removed */
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
@@ -100,13 +114,6 @@
 
             <!-- Results Section -->
             <div id="results" class="mt-8"></div>
-            
-            <!-- Removed Map Section -->
-            <!-- <div id="map-container" class="mt-8 hidden">
-                <h2 class="text-2xl font-bold mb-4 text-white">Route Overview</h2>
-                <div id="map"></div>
-                <div id="google-maps-link-container" class="mt-4 text-center"></div>
-            </div> -->
         </main>
 
         <footer class="text-center mt-8 text-sm text-gray-400">
@@ -115,7 +122,6 @@
                 <a href="mailto:ajisan2330152@bsds.uiu.ac.bd" class="hover:text-white hover:underline">Email</a>
                 <a href="https://www.facebook.com/al.takvir.ahmed.jisan/" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">Facebook</a>
                 <a href="https://github.com/jisan002" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">GitHub</a>
-                <!-- About Me Link Integrated -->
                 <a href="https://jisan002.github.io/Jisan-Portfolio/" target="_blank" rel="noopener noreferrer" class="hover:text-white hover:underline">About Me</a>
             </div>
             <p class="mt-2">Feel free to star this project on GitHub or contribute to make it even better!</p>
@@ -128,12 +134,12 @@
         // --- 3D Animated Background ---
         let scene, camera, renderer, stars;
         const jisanLetters = []; // Array to hold individual letter sprites (recycled pool)
-        const nameString = "JISANBRISTY";
+        const nameString = "JISANBRISTY"; // Updated nameString
         let nextLetterIndex = 0; // Tracks which letter in JISAN to spawn next
         const letterTextures = {}; // Stores pre-rendered textures for each letter
 
         // Declare baseFontSize and baseCanvasSize in a higher scope
-        const baseFontSize = 60; // Base font size for canvas rendering
+        const baseFontSize = 60; // Updated baseFontSize
         const baseCanvasSize = 150; // Base canvas size for each letter texture
 
         function init3DBackground() {
